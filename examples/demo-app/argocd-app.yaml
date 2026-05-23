@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gena-demo-app
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    # ⚠️ ВАЖЛИВО: Замініть на URL вашого відкритого Git-репозиторію
+    repoURL: 'https://github.com/your-username/your-gena-repo.git'
+    targetRevision: HEAD
+    # Шлях до теки всередині репозиторію, де лежать маніфести додатку
+    path: 'examples/demo-app'
+  destination:
+    # Стандартна внутрішня адреса кластера K3s
+    server: 'https://kubernetes.default.svc'
+    # Простір імен, куди буде розгорнуто додаток
+    namespace: gena-demo
+  syncPolicy:
+    automated:
+      prune: true      # Автоматично видаляти ресурси, яких більше немає в Git
+      selfHeal: true   # Автоматично виправляти ручні зміни в кластері, повертаючи їх до стану в Git
+    syncOptions:
+      - CreateNamespace=true # Створити простір імен, якщо його ще не існує
