@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-name: signal-adapter-code
-namespace: monitoring
-data:
-main.py: |
-# PLACEHOLDER: add your signal_main.py here
