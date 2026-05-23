@@ -14,37 +14,27 @@
 
 ## 🏗 Архітектура платформи
 
-Схема нижче демонструє взаємодію компонентів всередині кластера та їх зв'язок із зовнішнім світом. *(GitHub автоматично рендерить цю схему)*.
+Архітектура побудована за принципами мікросервісів та розділення відповідальності. Нижче наведено дві схеми, які детально пояснюють логіку роботи платформи.
 
-```mermaid
-graph TD
-    User((🌐 Користувач / Адмін)) -->|HTTPS| DNS[Cloudflare DNS]
-    DNS -->|Трафік| UFW[UFW Firewall + Fail2Ban]
-    
-    subgraph Host OS [Debian 12 / Ubuntu 22.04 Server]
-        UFW --> Cockpit[Cockpit UI: 9090]
-        UFW --> K3s[K3s Kubernetes Cluster]
-        
-        subgraph K3s Cluster
-            K3s --> Ingress[Ingress NGINX]
-            
-            Ingress -->|Grafana| Grafana[Grafana UI]
-            Ingress -->|ArgoCD| ArgoCD[ArgoCD Server]
-            Ingress -->|Portainer| Portainer[Portainer Server]
-            
-            CertManager[Cert-Manager] -.->|DNS-01 Challenge| DNS
-            
-            subgraph Monitoring & Alerting
-                Metrics[Metrics Server] --> Prom[Prometheus]
-                Promtail --> Loki[Loki]
-                Loki --> Grafana
-                Prom --> Grafana
-                
-                Prom --> Alertmanager[Alertmanager]
-                Alertmanager -->|Webhook| SignalAdapter[Python Signal Adapter]
-                SignalAdapter -->|API| SignalCLI[Signal REST API]
-            end
-        end
-    end
-    
-    SignalCLI -->|Push повідомлення| SignalApp((📱 Додаток Signal))
+### 🔄 Взаємодія компонентів та маршрутизація
+На цій схемі зображено, як користувацький трафік проходить через DNS до кластера, а також як внутрішні сервіси (моніторинг) взаємодіють між собою для генерації та відправки сповіщень у Signal.
+
+<p align="center">
+  <img src="assets/architecture-flow.png" alt="Взаємодія компонентів G.E.N.A." width="100%">
+</p>
+
+### 🥪 Рівнева схема інфраструктури
+Платформа чітко розділена на фізичний рівень (ОС та безпека), рівень оркестрації (K3s, Ingress) та рівень сервісів (моніторинг та користувацькі додатки).
+
+<p align="center">
+  <img src="assets/architecture-layers.png" alt="Рівнева схема G.E.N.A." width="100%">
+</p>
+
+---
+
+## 📚 Документація проекту
+
+Для детального вивчення платформи використовуйте наступні посібники:
+* 🚀 **[Інструкція з інсталяції та розгортання](docs/install.md)**
+* 📖 **[Посібник користувача (Як деплоїти додатки)](docs/usage.md)**
+* 🧰 **[Адміністрування та Траблшутинг (UI та CLI)](docs/troubleshooting.md)**
