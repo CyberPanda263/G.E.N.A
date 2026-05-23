@@ -3,7 +3,7 @@
 ![Keep a Changelog](https://img.shields.io/badge/Changelog-Keep_a_Changelog-E05735?logo=keep-a-changelog&logoColor=white)
 ![Version](https://img.shields.io/badge/Current_Version-v4.0.0-blue)
 
-Усі важливі зміни у проєкті **G.E.N.A. (GitOps & Engineering Network Assistant)** будуть документуватися в цьому файлі. Формат базується на [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+Усі важливі зміни у проєкті **G.E.N.A. (GitOps & Engineering Network Assistant)** документуються в цьому файлі. Формат базується на [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
@@ -27,11 +27,23 @@
 
 ## [3.0.0] — 2026-01-15
 ### 🚀 Додано
-* Перша стабільна інтеграція ArgoCD для автоматизації деплою.
-* Додано підтримку панелі Cockpit для базового адміністрування ОС Linux через веб.
+* **GitOps інтеграція:** Перша стабільна інтеграція ArgoCD для автоматизації деплою додатків.
+* **Cockpit UI:** Додано підтримку панелі Cockpit для базового адміністрування ОС Linux через веб-інтерфейс.
+
+### 🛠 Покращення
+* Оптимізація ресурсів кластера K3s для роботи на Single-node інсталяціях.
+
+---
+
+## [2.0.0] — 2025-12-01
+### 🚀 Додано
+* **GitLab CE:** Додано підтримку автоматизованого розгортання GitLab Community Edition у Kubernetes.
+* **MS SQL Server:** Повна підтримка розгортання SQL Server 2025 на Linux через K3s.
+* **Веб-стек:** Стандартизовано розгортання ASP.NET Core API з використанням Kestrel та Nginx Ingress Controller.
 
 ---
 
 ## [1.0.0] — 2025-10-12
 ### 🚀 Додано
-* Базовий інсталяційний bash-скрипт для налаштування Docker-оточення та первинних утиліт автоматизації мережі.
+* **MVP:** Перша версія автоматизованого bash-скрипта для налаштування Docker-оточення.
+* Базові інструменти мережевої автоматизації.
