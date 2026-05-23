@@ -1,51 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: grafana-ingress
-  namespace: monitoring
-  annotations:
-    cert-manager.io/cluster-issuer: ${LE_ISSUER_NAME}
+name: grafana-ingress
 spec:
-  ingressClassName: nginx
-  tls:
-    - hosts:
-        - ${GRAFANA_HOST}
-      secretName: grafana-tls
-  rules:
-    - host: ${GRAFANA_HOST}
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: monitoring-grafana
-                port:
-                  number: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: argocd-ingress
-  namespace: argocd
-  annotations:
-    cert-manager.io/cluster-issuer: ${LE_ISSUER_NAME}
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-spec:
-  ingressClassName: nginx
-  tls:
-    - hosts:
-        - ${ARGOCD_HOST}
-      secretName: argocd-tls
-  rules:
-    - host: ${ARGOCD_HOST}
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: argocd-server
-                port:
-                  number: 443
-# Portainer ingress appended conditionally by script when PORTAINER_CHOICE==2
+rules:
+- host: ${GRAFANA_HOST}

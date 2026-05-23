@@ -1,74 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: signal-adapter-code
-  namespace: monitoring
+name: signal-adapter-code
+namespace: monitoring
 data:
-  main.py: |
-    # (вставте тут вміст signal_main.py з вашого скрипта)
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: signal-adapter
-  namespace: monitoring
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: signal-adapter
-  template:
-    metadata:
-      labels:
-        app: signal-adapter
-    spec:
-      containers:
-        - name: python-adapter
-          image: python:3.11-slim
-          command: ["python", "/app/main.py"]
-          ports: [{ containerPort: 8000 }]
-          env:
-            - name: SIGNAL_API_URL
-              value: "http://127.0.0.1:8080"
-            - name: SIGNAL_NUMBER
-              value: "${SIGNAL_NUMBER}"
-            - name: SIGNAL_RECIPIENTS
-              value: "${SIGNAL_RECIPIENTS}"
-            - name: WEBHOOK_TOKEN
-              value: "${WEBHOOK_TOKEN}"
-          resources:
-            requests: { cpu: 10m, memory: 32Mi }
-            limits: { cpu: 100m, memory: 128Mi }
-          volumeMounts:
-            - name: code-volume
-              mountPath: /app
-        - name: signal-rest-api
-          image: bbernhard/signal-cli-rest-api:latest
-          env:
-            - name: MODE
-              value: "native"
-            - name: SIGNAL_CLI_OPTS
-              value: "--config /home/.local/share/signal-cli"
-          ports: [{ containerPort: 8080 }]
-          resources:
-            requests: { cpu: 50m, memory: 128Mi }
-            limits: { cpu: 300m, memory: 512Mi }
-          volumeMounts:
-            - name: signal-data
-              mountPath: /home/.local/share/signal-cli
-      volumes:
-        - name: code-volume
-          configMap: { name: signal-adapter-code }
-        - name: signal-data
-          hostPath:
-            path: "${SIGNAL_DIR}"
-            type: DirectoryOrCreate
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: signal-adapter-service
-  namespace: monitoring
-spec:
-  ports: [{ port: 8000, targetPort: 8000 }]
-  selector: { app: signal-adapter }
+main.py: |
+# PLACEHOLDER: add your signal_main.py here

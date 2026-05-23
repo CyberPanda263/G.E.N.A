@@ -1,26 +1,8 @@
-name: Deploy to Cluster via ArgoCD
-
-on:
-  push:
-    branches: [ main ]
-
+name: Deploy
+on: [push]
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v3
-
-      - name: Login to cluster (example using KUBECONFIG secret)
-        run: |
-          echo "${{ secrets.KUBECONFIG }}" > kubeconfig
-          export KUBECONFIG=$PWD/kubeconfig
-          kubectl get nodes
-
-      - name: Apply manifests
-        run: |
-          kubectl apply -f manifests/
-    # Note: For ArgoCD GitOps, push manifests to repo and configure ArgoCD app to track main branch.
+deploy:
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v4
+- run: kubectl apply -f manifests/
