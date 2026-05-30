@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aspnet-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # Ця анотація каже cert-manager випустити сертифікат
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # Додаткові налаштування для Nginx (наприклад, розмір файлу для завантаження)
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+spec:
+  tls:
+  - hosts:
+    - app.binaro.uno
+    # Сюди cert-manager покладе готовий сертифікат
+    secretName: aspnet-app-tls
+  rules:
+  - host: app.binaro.uno
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: aspnet-service
+            port:
+              number: 80

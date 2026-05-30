@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aspnet-config
+  labels:
+    app: aspnet-web
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  # Можна додавати будь-які налаштування, які ASP.NET прочитає як IConfiguration
+  Logging__LogLevel__Default: "Information"
+  ConnectionStrings__DefaultConnection: "Server=my-db-server;Database=myDb;User Id=user;Password=pass;"

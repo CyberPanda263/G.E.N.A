@@ -24,40 +24,35 @@
 
 Перед запуском інсталяційного скрипта необхідно експортувати обов'язкові змінні оточення. Вони використовуються для автоматичного налаштування сертифікатів Let's Encrypt, інтеграції з API Cloudflare, авторизації у Signal та конфігурації доменів сервісів.
 
-Виконайте наступні команди у вашому терміналі або збережіть їх у файл `env.sh` та виконайте `source env.sh`:
+Виконайте наступні команди у вашому терміналі або збережіть їх у файл `.env` та виконайте :
 
 ```bash
 # =========================================================
 # ОБОВ'ЯЗКОВІ ЗМІННІ СЕРЕДОВИЩА (REQUIRED ENV)
 # =========================================================
+USER_EMAIL="your-email@example.com"
 
-# Email для реєстрації в Let's Encrypt та сповіщень про сертифікати
-export USER_EMAIL="your-email@example.com"
+# Конфігурація Signal
+SIGNAL_NUMBER="+380XXXXXXXXX"
+SIGNAL_RECIPIENTS="+380YYYYYYYYY,+380ZZZZZZZZZ"
+WEBHOOK_TOKEN="super-secret-auth-token-2026"
 
-# Конфігурація Signal месенджера для надсилання сповіщень
-export SIGNAL_NUMBER="+380XXXXXXXXX"                   # Номер шлюзу кластера
-export SIGNAL_RECIPIENTS="+380YYYYYYYYY,+380ZZZZZZZZZ" # Номери отримувачів алертів (через кому)
+# Мережеві домени (FQDN)
+GRAFANA_HOST="grafana.yourdomain.com"
+ARGOCD_HOST="argocd.yourdomain.com"
+TEKTON_HOST="tekton.yourdomain.com"
 
-# Секретний токен для захисту зв'язку між Alertmanager та Signal-адаптером
-export WEBHOOK_TOKEN="super-secret-auth-token-2026"
-
-# Мережеві домени (FQDN) для доступу до веб-інтерфейсів (керуються через Cloudflare)
-export GRAFANA_HOST="grafana.yourdomain.com"
-export ARGOCD_HOST="argocd.yourdomain.com"
-
-# Паролі адміністратора для первинного входу
-export GRAFANA_ADMIN_PASSWORD="КастомнийНадійнийПароль123!"
-
-# API Токен Cloudflare з правами "Zone.DNS:Edit" для DNS-01 challenge
-export CF_API_TOKEN="your_cloudflare_dns_zone_api_token_here"
+# Паролі та Токени
+GRAFANA_ADMIN_PASSWORD="КастомнийНадійнийПароль123!"
+CF_API_TOKEN="your_cloudflare_dns_zone_api_token_here"
 
 # =========================================================
 # ОПЦІОНАЛЬНІ ЗМІННІ (ЗА ЗАМОВЧУВАННЯМ)
 # =========================================================
-# export PORTAINER_HOST="portainer.yourdomain.com"     # Обов'язково, якщо обрано Portainer Server
-# export K3S_VERSION="v1.31.6+k3s1"                    # Версія дистрибутиву K3s
-# export PROM_RETENTION="7d"                           # Термін зберігання метрик
-# export LOKI_RETENTION="168h"                         # Термін зберігання логів
+PORTAINER_HOST="portainer.yourdomain.com"
+MINIO_HOST="minio.yourdomain.com"
+MINIO_ROOT_USER="admin"
+MINIO_ROOT_PASSWORD="MinioSuperSecretPassword!"
 ```
 
 > ⚠️ **ВАЖЛИВО:** Перевірте правильність заповнення `CF_API_TOKEN`. Без коректного токена Cert-Manager не зможе автоматично випустити SSL-сертифікати через DNS-01 challenge, і доступ до веб-інтерфейсів по HTTPS буде заблоковано.
@@ -71,6 +66,10 @@ export CF_API_TOKEN="your_cloudflare_dns_zone_api_token_here"
 ```bash
 # Перехід у режим root
 sudo -i
+
+# Створіть директорію в якій буде розгорнута платформа і перенесіть туди файл gena_deploy.sh та файл .env
+mkdir -p /opt/gena-platform
+cd /opt/gena-platform
 
 # Надайте файлу права на виконання та запустіть (переконайтеся, що змінні експортовані)
 chmod +x gena_deploy.sh

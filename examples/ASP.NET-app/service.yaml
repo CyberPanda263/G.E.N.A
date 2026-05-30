@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aspnet-service
+  labels:
+    app: aspnet-web
+spec:
+  type: ClusterIP
+  selector:
+    app: aspnet-web
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080

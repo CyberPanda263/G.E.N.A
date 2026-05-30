@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aspnet-web
+  labels:
+    app: aspnet-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: aspnet-web
+  template:
+    metadata:
+      labels:
+        app: aspnet-web
+    spec:
+      containers:
+      - name: aspnet-web
+        # Замініть на свій реєстр та назву образу
+        image: your-docker-registry/aspnet-webapp:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        # Підключаємо змінні середовища з ConfigMap
+        envFrom:
+        - configMapRef:
+            name: aspnet-config
+        # Перевірка здоров'я додатку
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
